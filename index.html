@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache">
 <title>Peracik Proyek Kolaborasi Antar Mapel</title>
 <style>
   :root{
-    --ink:#16262E; --slate:#22414F; --paper:#fff; --wash:#EEF2F4;
-    --line:#D6DEE1; --amber:#E8871A; --amber-d:#B8690F; --amber-w:#FDF2E3;
-    --steel:#2E6E8E; --steel-w:#E9F1F5; --gray:#5B6B73;
+    --ink:#1F1F23; --slate:#343439; --paper:#fff; --wash:#F4F2F1;
+    --line:#DDD9D6; --amber:#E82028; --amber-d:#B5121B; --amber-w:#FDECEC;
+    --steel:#585858; --steel-w:#EFEEEE; --gray:#5F5F63;
     --ok:#2F7A55; --ok-w:#E6F2EB; --bad:#A0392B; --bad-w:#FBEDEA;
     --serif:Georgia,'Times New Roman',serif;
     --sans:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
@@ -24,9 +25,9 @@
   .brand>div{max-width:760px}
   #logo-sekolah{display:block;height:46px;width:auto;max-width:100%;object-fit:contain;background:none;padding:0;margin:0 0 14px}
   h1{font-family:var(--serif);font-size:26px;margin:0 0 4px;font-weight:700}
-  .sub{color:#9FB2BB;font-size:13.5px;margin:0}
+  .sub{color:#BDBDC2;font-size:13.5px;margin:0}
   nav{display:flex;gap:3px;margin-top:16px;flex-wrap:wrap}
-  nav button{font-size:13.5px;font-weight:600;padding:9px 14px;border:0;border-radius:8px 8px 0 0;background:transparent;color:#9FB2BB;cursor:pointer;font-family:var(--sans)}
+  nav button{font-size:13.5px;font-weight:600;padding:9px 14px;border:0;border-radius:8px 8px 0 0;background:transparent;color:#BDBDC2;cursor:pointer;font-family:var(--sans)}
   nav button[aria-selected="true"]{background:var(--wash);color:var(--ink)}
   nav button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
 
@@ -56,13 +57,13 @@
   .pill.bad{background:var(--bad-w);color:var(--bad)}
   .pill.warn{background:var(--amber-w);color:var(--amber-d)}
   .notis{border-radius:10px;padding:12px 14px;font-size:13.5px;margin-top:12px}
-  .notis.w{background:var(--amber-w);color:#7A4708}
-  .notis.i{background:var(--steel-w);color:#1F4E64}
+  .notis.w{background:var(--amber-w);color:#7A1017}
+  .notis.i{background:var(--steel-w);color:#2B2B30}
   .notis.b{background:var(--bad-w);color:var(--bad)}
   .notis.k{background:var(--wash);color:var(--gray)}
 
   .blok{border:1px solid var(--line);border-radius:10px;padding:15px;margin-bottom:11px;background:#fff}
-  .blok.utama{border-color:#E0A96B;background:#FEF9F3}
+  .blok.utama{border-color:#EE9EA2;background:#FFF6F6}
   .blok .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
   .tag{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--amber-d)}
   .baris{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
@@ -76,11 +77,11 @@
   .kartuTopik.pilih .m{color:var(--amber)}
   .kartuTopik .t{font-size:13.5px;line-height:1.45}
 
-  pre.prompt{background:var(--wash);border-radius:10px;padding:15px;font-family:var(--mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;margin:0;color:#1E2A30;max-height:520px;overflow:auto}
+  pre.prompt{background:var(--wash);border-radius:10px;padding:15px;font-family:var(--mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;margin:0;color:#1F1F23;max-height:520px;overflow:auto}
   .kosong{text-align:center;color:var(--gray);padding:30px 16px;font-size:14px}
   .kosong b{display:block;font-family:var(--serif);font-size:17px;color:var(--ink);margin-bottom:4px}
   .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:24px;font-size:14px;font-weight:600;transition:transform .22s;z-index:9;max-width:90vw;text-align:center}
-  .tanya-latar{position:fixed;inset:0;background:rgba(22,38,46,.55);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
+  .tanya-latar{position:fixed;inset:0;background:rgba(31,31,35,.55);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
   .tanya-latar[hidden]{display:none}
   .tanya{background:var(--paper);border-radius:14px;max-width:440px;width:100%;padding:22px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
   .tanya p{margin:0 0 18px;font-size:15px;line-height:1.5;color:var(--ink)}
@@ -124,6 +125,10 @@
     nav{margin-left:-14px;margin-right:-14px;padding-left:14px;padding-right:14px}
   }
   .card:has(>#palang-peta:empty){display:none}
+  .kicker{color:var(--amber-d)}
+  header .kicker{color:#FF7A80}
+  header{border-bottom:4px solid var(--amber)}
+  nav button[aria-selected="true"]{border-top:3px solid var(--amber)}
 </style>
 </head>
 <body>
@@ -485,7 +490,7 @@ function tim(){ return S.utama.mapel ? [S.utama,...S.dukung] : [...S.dukung]; }
 function ke(n){
   ['ide','peta','jobsheet','atur'].forEach(x=>{
     document.getElementById('p-'+x).hidden=(x!==n);
-    document.getElementById('t-'+x).setAttribute('aria-selected',x===n);
+    document.getElementById('t-'+x).setAttribute('aria-selected',x===n); if(x===n){ try{ document.getElementById('t-'+x).scrollIntoView({inline:'center',block:'nearest'}); }catch(e){} }
   });
   if(n==='ide'){ gambarIde(); gambarPapan(); gambarPromptIde(); }
   if(n==='peta') gambarPeta();
@@ -1221,6 +1226,19 @@ function tanya(teks,ya,batal){
 function pesan(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('on');
   clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('on'),3200); }
 (async()=>{ const d=await Simpanan.baca(); if(d){ try{ S=normalisasi(d); }catch(e){ S=kosong('SMP'); } } render(); })();
+
+/* ---------- pembaruan otomatis: tidak perlu hapus riwayat peramban ---------- */
+const VERSI_BUILD='2026-11-03-c';
+(async function cekPembaruan(){
+  try{
+    if(location.protocol==='file:') return;
+    const r=await fetch(location.pathname+'?cek='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
+    const m=(await r.text()).match(/const VERSI_BUILD='([^']+)'/);
+    if(m && m[1]!==VERSI_BUILD && location.search.indexOf('v='+encodeURIComponent(m[1]))<0){
+      location.replace(location.pathname+'?v='+encodeURIComponent(m[1]));
+    }
+  }catch(e){}
+})();
 </script>
 </body>
 </html>

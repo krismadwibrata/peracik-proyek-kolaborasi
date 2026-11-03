@@ -18,7 +18,7 @@
   *{box-sizing:border-box}
   body{margin:0;background:var(--wash);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
   .wrap{max-width:1080px;margin:0 auto;padding:0 16px 90px}
-  header{background:#C8161D;color:#fff;padding:20px 0 16px}
+  header{background:#C8161D;color:#fff;padding:28px 0 0}
   header .wrap{padding-bottom:0}
   .kicker{font-size:11px;letter-spacing:.18em;font-weight:700;color:var(--amber);margin:0 0 5px}
   .brand{display:block}
@@ -117,7 +117,8 @@
   nav::-webkit-scrollbar{display:none}
   nav button{flex:none;white-space:nowrap;scroll-snap-align:start}
   @media (max-width:600px){
-    #logo-sekolah{height:40px;margin-bottom:12px}
+    header{padding-top:22px}
+  #logo-sekolah{height:40px;margin-bottom:14px}
     h1{font-size:22px}
     .sub{font-size:14px}
     .kicker{letter-spacing:.12em}
@@ -1231,12 +1232,12 @@ function pesan(t){ const el=document.getElementById('toast'); el.textContent=t; 
 (async()=>{ const d=await Simpanan.baca(); if(d){ try{ S=normalisasi(d); }catch(e){ S=kosong('SMP'); } } render(); })();
 
 /* ---------- pembaruan otomatis: tidak perlu hapus riwayat peramban ---------- */
-const VERSI_BUILD='2026-11-03-d';
+const VERSI_BUILD='2026-11-03-e';
 (async function cekPembaruan(){
   try{
     if(location.protocol==='file:') return;
     const r=await fetch(location.pathname+'?cek='+Date.now(),{cache:'no-store'}); if(!r.ok) return;
-    const m=(await r.text()).match(/const VERSI_BUILD='2026-11-03-d']+)'/);
+    const m=(await r.text()).match(new RegExp('VERSI_BUILD'+String.fromCharCode(61)+String.fromCharCode(39)+'([^'+String.fromCharCode(39)+']+)'));
     if(m && m[1]!==VERSI_BUILD && location.search.indexOf('v='+encodeURIComponent(m[1]))<0){
       location.replace(location.pathname+'?v='+encodeURIComponent(m[1]));
     }

@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Peracik Proyek Kolaborasi Antar Mapel</title>
+<style>
+  :root{
+    --ink:#16262E; --slate:#22414F; --paper:#fff; --wash:#EEF2F4;
+    --line:#D6DEE1; --amber:#E8871A; --amber-d:#B8690F; --amber-w:#FDF2E3;
+    --steel:#2E6E8E; --steel-w:#E9F1F5; --gray:#5B6B73;
+    --ok:#2F7A55; --ok-w:#E6F2EB; --bad:#A0392B; --bad-w:#FBEDEA;
+    --serif:Georgia,'Times New Roman',serif;
+    --sans:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--wash);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px 90px}
+  header{background:var(--ink);color:#fff;padding:20px 0 16px}
+  header .wrap{padding-bottom:0}
+  .kicker{font-size:11px;letter-spacing:.18em;font-weight:700;color:var(--amber);margin:0 0 5px}
+  .brand{display:flex;gap:14px;align-items:center}
+  #logo-sekolah{height:52px;width:auto;max-width:210px;object-fit:contain;background:#fff;border-radius:8px;padding:4px;flex:none}
+  h1{font-family:var(--serif);font-size:26px;margin:0 0 4px;font-weight:700}
+  .sub{color:#9FB2BB;font-size:13.5px;margin:0}
+  nav{display:flex;gap:3px;margin-top:16px;flex-wrap:wrap}
+  nav button{font-size:13.5px;font-weight:600;padding:9px 14px;border:0;border-radius:8px 8px 0 0;background:transparent;color:#9FB2BB;cursor:pointer;font-family:var(--sans)}
+  nav button[aria-selected="true"]{background:var(--wash);color:var(--ink)}
+  nav button:focus-visible{outline:2px solid var(--amber);outline-offset:-2px}
+
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px;margin-top:16px}
+  h2{font-family:var(--serif);font-size:20px;margin:0 0 4px}
+  h3{font-family:var(--serif);font-size:16.5px;margin:0}
+  .hint{color:var(--gray);font-size:13.5px;margin:0 0 14px}
+  .eyebrow{font-size:10.5px;letter-spacing:.16em;font-weight:700;color:var(--amber-d);margin:0 0 8px}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--gray);margin-bottom:4px}
+  input,textarea,select{width:100%;font-family:var(--sans);font-size:14.5px;color:var(--ink);padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff}
+  textarea{resize:vertical;line-height:1.55}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--steel);outline-offset:-1px;border-color:transparent}
+  .sisa{font-size:11.5px;color:var(--gray);text-align:right;margin-top:3px;font-family:var(--mono)}
+  .sisa.habis{color:var(--bad);font-weight:700}
+  .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  button.act{font-family:var(--sans);font-size:14px;font-weight:600;padding:9px 15px;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+  button.act.ghost{background:#fff;color:var(--ink)}
+  button.act.warn{background:#fff;color:var(--bad);border-color:#E0C3BE}
+  button.act.sm{font-size:12.5px;padding:5px 10px;border-radius:6px}
+  button.act:hover{opacity:.88}
+  button.act:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:20px;background:var(--wash);color:var(--slate)}
+  .pill.ok{background:var(--ok-w);color:var(--ok)}
+  .pill.bad{background:var(--bad-w);color:var(--bad)}
+  .pill.warn{background:var(--amber-w);color:var(--amber-d)}
+  .notis{border-radius:10px;padding:12px 14px;font-size:13.5px;margin-top:12px}
+  .notis.w{background:var(--amber-w);color:#7A4708}
+  .notis.i{background:var(--steel-w);color:#1F4E64}
+  .notis.b{background:var(--bad-w);color:var(--bad)}
+  .notis.k{background:var(--wash);color:var(--gray)}
+
+  .blok{border:1px solid var(--line);border-radius:10px;padding:15px;margin-bottom:11px;background:#fff}
+  .blok.utama{border-color:#E0A96B;background:#FEF9F3}
+  .blok .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:10px}
+  .tag{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--amber-d)}
+  .baris{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+  .baris:last-child{border-bottom:0}
+  .baris span{flex:1;font-size:14px}
+
+  .kartuTopik{border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;background:#fff;transition:.12s}
+  .kartuTopik:hover{border-color:var(--steel)}
+  .kartuTopik.pilih{background:var(--ink);border-color:var(--ink);color:#fff}
+  .kartuTopik .m{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber-d);margin-bottom:4px}
+  .kartuTopik.pilih .m{color:var(--amber)}
+  .kartuTopik .t{font-size:13.5px;line-height:1.45}
+
+  pre.prompt{background:var(--wash);border-radius:10px;padding:15px;font-family:var(--mono);font-size:12.5px;line-height:1.6;white-space:pre-wrap;margin:0;color:#1E2A30;max-height:520px;overflow:auto}
+  .kosong{text-align:center;color:var(--gray);padding:30px 16px;font-size:14px}
+  .kosong b{display:block;font-family:var(--serif);font-size:17px;color:var(--ink);margin-bottom:4px}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(140%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:24px;font-size:14px;font-weight:600;transition:transform .22s;z-index:9;max-width:90vw;text-align:center}
+  .tanya-latar{position:fixed;inset:0;background:rgba(22,38,46,.55);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
+  .tanya-latar[hidden]{display:none}
+  .tanya{background:var(--paper);border-radius:14px;max-width:440px;width:100%;padding:22px;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+  .tanya p{margin:0 0 18px;font-size:15px;line-height:1.5;color:var(--ink)}
+  .tanya .row{justify-content:flex-end;gap:10px}
+  .toast.on{transform:translateX(-50%) translateY(0)}
+  .palang{margin-top:10px;font-size:12.5px}
+  .palang div{margin-top:3px}
+  .palang .x{color:var(--bad);font-weight:600}
+  .palang .v{color:var(--ok)}
+  [hidden]{display:none !important}
+  @media (max-width:900px){ .g4,.g3,.g2{grid-template-columns:1fr} h1{font-size:21px} }
+  @media (prefers-reduced-motion:reduce){*{transition:none !important}}
+
+  /* Aksesibilitas: sasaran sentuh, keterbacaan, fokus */
+  body{font-size:16px}
+  .kicker,.kartuTopik .m{font-size:12px}
+  input,textarea,select{min-height:44px;font-size:16px}
+  button.act{min-height:44px;font-size:15px}
+  button.act.sm{min-height:36px;font-size:14px;padding:6px 12px}
+  nav button{min-height:44px;font-size:14.5px}
+  nav[role=tablist]{display:flex;flex-wrap:wrap}
+  input[type=checkbox]{width:22px !important;height:22px !important;min-height:0}
+  label:has(input[type=checkbox]){display:inline-flex;align-items:center;gap:8px;min-height:44px;cursor:pointer}
+  :focus-visible{outline:3px solid var(--steel);outline-offset:2px}
+  .lompat{position:absolute;left:-999px;top:8px;background:#fff;color:var(--ink);padding:10px 14px;border-radius:8px;z-index:99;font-weight:700}
+  .lompat:focus{left:8px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand"><img id="logo-sekolah" alt="Logo sekolah" hidden><div><p class="kicker" id="kicker">PROYEK KOLABORASI ANTAR MATA PELAJARAN</p>
+    <h1>Peracik Proyek Bersama</h1>
+    <p class="sub">Satu mapel jadi jangkar, mapel lain menyambung ke sana. Tiga sampai lima mapel. Keluarannya perintah siap tempel untuk menyusun dokumen proyek.</p></div></div>
+    <nav role="tablist">
+      <button role="tab" id="t-ide" aria-selected="true" onclick="ke('ide')">1 · Ide proyek</button>
+      <button role="tab" id="t-peta" aria-selected="false" onclick="ke('peta')">2 · Peta keterkaitan</button>
+      <button role="tab" id="t-jobsheet" aria-selected="false" onclick="ke('jobsheet')">3 · Perintah job sheet</button>
+      <button role="tab" id="t-atur" aria-selected="false" onclick="ke('atur')">Pengaturan sekolah</button>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ 1 IDE ============ -->
+<section id="p-ide" tabindex="-1">
+  <div class="card">
+    <p class="eyebrow">AWAL</p>
+    <h2>Masalah kontekstual yang ingin diselesaikan</h2>
+    <p class="hint">Mulai dari masalah nyata di sekitar siswa, bukan dari mata pelajaran. Tulis dalam satu sampai tiga kalimat: apa yang terjadi, siapa yang terdampak, dan di mana. Boleh dikosongkan bila Anda ingin AI yang mengusulkan masalahnya.</p>
+    <textarea id="f-sumber" aria-label="Masalah kontekstual yang ingin diselesaikan" rows="3" maxlength="300" oninput="infoMasalah()"></textarea>
+    <div class="sisa" id="sisa-sumber">0 / 300</div>
+    <div id="contoh-masalah" class="hint" style="margin:8px 0 0"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">KONTEKS</p>
+    <h2>Proyek ini untuk siapa</h2>
+    <p class="hint">Pilih tingkatnya dulu — daftar mata pelajaran menyesuaikan struktur kurikulum tingkat itu.</p>
+    <div class="g4">
+      <div id="wadah-jurusan"><label for="f-jurusan" id="lbl-jurusan">Program keahlian</label><select id="f-jurusan"></select></div>
+      <div><label for="f-tingkat">Tingkat</label><select id="f-tingkat"></select></div>
+      <div><label for="f-rombel">Rombel yang ikut</label><input id="f-rombel" placeholder="XII TJKT 1, XII TJKT 2"></div>
+      <div><label for="f-jendela">Jendela waktu</label><input id="f-jendela" placeholder="Januari – April 2026"></div>
+    </div>
+    <div id="notis-tingkat"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">JANGKAR</p>
+    <h2>Mapel utama dan topiknya</h2>
+    <p class="hint">Mapel yang menjadi induk proyek — boleh mapel apa pun, tidak harus produktif. Yang dipilih sebaiknya mapel yang topiknya paling menentukan wujud produk akhir. Isi topik yang memang sedang berjalan pada jendela waktu di atas; proyek yang memaksa guru mengajar di luar urutannya sendiri akan bubar di minggu ketiga.</p>
+    <div id="isi-utama"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">PENYAMBUNG</p>
+    <h2>Mapel pendukung dan topiknya</h2>
+    <p class="hint">Dua sampai empat mapel. Belum perlu menetapkan peran — di tahap ini cukup kumpulkan topiknya, supaya irisannya kelihatan.</p>
+    <div id="isi-dukung"></div>
+    <div class="row" style="margin-top:12px">
+      <select id="f-tambahmapel" style="max-width:320px"></select>
+      <button class="act ghost" onclick="tambahDukung()">Tambahkan</button>
+      <span class="pill" id="jml-mapel"></span>
+    </div>
+    <div id="notis-produktif"></div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">MERACIK</p>
+    <h2>Mengubah topik jadi ide proyek</h2>
+    <p class="hint">Dua jalan. Papan irisan untuk berdiskusi langsung di ruangan, perintah AI untuk mendapat usulan cepat.</p>
+    <div class="row" style="margin-bottom:14px">
+      <button class="act" id="m-papan" onclick="modeIde('papan')">Papan irisan</button>
+      <button class="act ghost" id="m-ai" onclick="modeIde('ai')">Racik dengan AI</button>
+    </div>
+    <div id="box-papan">
+      <p class="hint">Klik dua sampai tiga topik yang menurut Anda bersinggungan.</p>
+      <div class="g3" id="papan-topik"></div>
+      <div id="pemantik"></div>
+    </div>
+    <div id="box-ai" hidden>
+      <p class="hint" id="info-masalah"></p>
+      <pre class="prompt" id="teks-ide"></pre>
+      <div class="row" style="margin-top:12px"><button class="act" onclick="salin('teks-ide')">Salin perintah</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">HASIL</p>
+    <h2>Proyek terpilih</h2>
+    <p class="hint">Dari papan irisan maupun dari AI, keputusan akhir tetap Anda yang ketik.</p>
+    <div style="margin-bottom:12px"><label for="f-judul">Judul proyek</label><input id="f-judul" placeholder="Bengkel Jujur"></div>
+    <div class="g3">
+      <div><label for="f-masalah">Masalah nyata</label><textarea id="f-masalah" rows="4"></textarea></div>
+      <div><label for="f-produk">Produk atau unjuk kerja</label><textarea id="f-produk" rows="4"></textarea></div>
+      <div><label for="f-audiens">Audiens di luar sekolah</label><textarea id="f-audiens" rows="4"></textarea></div>
+    </div>
+    <div class="row" style="margin-top:12px"><button class="act ghost" onclick="ke('peta')">Lanjut ke peta keterkaitan →</button></div>
+  </div>
+</section>
+
+<!-- ============ 2 PETA ============ -->
+<section id="p-peta" hidden>
+  <div class="card">
+    <p class="eyebrow">LANGKAH 2</p>
+    <h2>Peta keterkaitan antar mapel</h2>
+    <p class="hint">Sekarang proyeknya sudah ada, tiap mapel mempersempit topiknya menjadi satu tujuan pembelajaran, lalu menuliskan bagaimana tujuan itu menopang mapel utama.</p>
+    <div id="isi-peta"></div>
+  </div>
+
+  <div class="card" id="kartu-tp">
+    <p class="eyebrow">BANTUAN</p>
+    <h2>Menurunkan tujuan pembelajaran dari Capaian Pembelajaran</h2>
+    <p class="hint">Tujuan pembelajaran tidak dikarang untuk proyek ini. Ambil dari Alur Tujuan Pembelajaran atau modul ajar Anda, yang jadwalnya jatuh di jendela waktu proyek. Tempel Capaian Pembelajaran tiap mapel di bawah, lalu AI membantu mempersempitnya.</p>
+    <div id="cp-list"></div>
+    <div id="notis-cp"></div>
+    <pre class="prompt" id="teks-tp" style="margin-top:16px"></pre>
+    <div class="row" style="margin:12px 0 18px"><button class="act" onclick="salin('teks-tp')">Salin perintah</button></div>
+    <label for="f-tempeltp">Tempel jawaban AI di sini</label>
+    <textarea id="f-tempeltp" rows="6" placeholder="MAPEL: Matematika&#10;TUJUAN: Siswa mampu menyajikan data keluhan pelanggan dalam grafik yang tepat jenisnya dan menyimpulkan pola yang paling sering muncul.&#10;CATATAN: ..."></textarea>
+    <div class="row" style="margin-top:12px">
+      <button class="act ghost" onclick="isikanTpDariAI()">Isikan ke formulir</button>
+      <span class="hint" style="margin:0">Cocokkan lagi dengan ATP Anda sebelum dipakai.</span>
+    </div>
+  </div>
+
+  <div class="card" id="kartu-bantuan">
+    <p class="eyebrow">BANTUAN</p>
+    <h2>Minta bantuan AI menyusun kalimatnya</h2>
+    <p class="hint">Perintah di bawah tersusun otomatis dari isian Anda. Salin ke ChatGPT, Gemini, atau Claude, lalu tempel jawabannya kembali ke kotak di bawahnya — formulir akan terisi sendiri.</p>
+    <div class="notis k">Tempel perintah ini ke <b>jendela percakapan yang baru</b>, terpisah dari perintah tujuan pembelajaran.</div>
+    <pre class="prompt" id="teks-kait" style="margin-top:12px"></pre>
+    <div class="row" style="margin:12px 0 18px"><button class="act" onclick="salin('teks-kait')">Salin perintah</button></div>
+    <label for="f-tempel">Tempel jawaban AI di sini</label>
+    <textarea id="f-tempel" rows="6" placeholder="MAPEL: Matematika&#10;KETERKAITAN: Tujuan pembelajaran Matematika tentang penyajian data dipakai siswa untuk ..."></textarea>
+    <div class="row" style="margin-top:12px">
+      <button class="act ghost" onclick="isikanDariAI()">Isikan ke formulir</button>
+      <span class="hint" style="margin:0">Periksa dan perbaiki hasilnya. AI membuat draf, Anda yang memutuskan.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="palang-peta"></div>
+  </div>
+</section>
+
+<!-- ============ 3 JOBSHEET ============ -->
+<section id="p-jobsheet" hidden>
+  <div class="card">
+    <p class="eyebrow">LANGKAH 3</p>
+    <h2>Perintah pembuat job sheet</h2>
+    <p class="hint">Perintah ini disusun otomatis dari seluruh isian Anda dan berdiri sendiri — boleh ditempel di jendela baru pada ChatGPT, Gemini, atau Claude. Seluruh aturan penilaian sudah tertanam di dalamnya.</p>
+    <div class="row" style="margin-bottom:14px">
+      <div style="max-width:190px"><label for="f-anggota">Anggota per kelompok</label>
+        <select id="f-anggota" onchange="setK('anggota',this.value)">
+          <option>4</option><option>5</option><option>6</option></select></div>
+      <div style="max-width:230px"><label for="f-bentuk">Bentuk kegiatan</label>
+        <select id="f-bentuk" onchange="setK('bentuk',this.value)">
+          <option>Penugasan (jobsheet)</option><option>Projek</option><option>Portofolio</option><option>Pameran / gelar karya</option></select></div>
+    </div>
+    <pre class="prompt" id="teks-job"></pre>
+    <div class="row" style="margin-top:12px">
+      <button class="act" onclick="salin('teks-job')">Salin perintah</button>
+      <button class="act ghost" onclick="unduhTeks()">Unduh sebagai berkas teks</button>
+    </div>
+    <div class="notis i" style="margin-top:14px">Kalau jawaban AI terpotong di tengah, ketik: <b>Lanjutkan dari bagian terakhir yang terpotong.</b> Job sheet lengkap biasanya butuh dua sampai tiga kali lanjutan.</div>
+    <div class="notis k" style="margin-top:12px"><b>Mengubahnya jadi berkas Word.</b><br>
+      ChatGPT — minta "buatkan versi .docx", lalu unduh berkasnya.<br>
+      Gemini — pakai tombol Ekspor ke Google Dokumen, lalu di Google Dokumen pilih Unduh sebagai Microsoft Word.<br>
+      Claude — hasilnya muncul sebagai dokumen di panel kanan, gunakan tombol unduh di sudutnya.<br>
+      Kalau ketiganya gagal, blok seluruh jawaban lalu tempel ke Word. Rapikan dengan Times New Roman 12, spasi 1,15, margin 3-3-2,5-2,5 cm, lalu ganti tiap baris [GANTI HALAMAN] dengan Ctrl+Enter.</div>
+  </div>
+</section>
+
+<!-- ============ PENGATURAN ============ -->
+<section id="p-atur" hidden>
+  <div class="card">
+    <p class="eyebrow">DIISI SEKALI OLEH PEMILIK</p>
+    <h2>Pengaturan sekolah</h2>
+    <p class="hint">Semua di halaman ini tersimpan sebagai data, bukan kode. Salinan aplikasi untuk sekolah lain cukup diisi ulang di sini — kodenya sama persis di mana pun.</p>
+    <div class="g3">
+      <div><label for="f-jenjang">Jenjang</label><select id="f-jenjang" onchange="gantiJenjang(this.value)">
+        <option value="SD">SD / MI</option><option value="SMP">SMP / MTs</option><option value="SMK">SMK / MAK</option></select></div>
+      <div><label for="f-sekolah">Nama sekolah</label><input id="f-sekolah" placeholder="Nama sekolah"></div>
+      <div><label for="f-yayasan">Yayasan / naungan (boleh kosong)</label><input id="f-yayasan" placeholder="Yayasan ..."></div>
+      <div><label for="f-kota">Kabupaten / kota</label><input id="f-kota" placeholder="Banyumas"></div>
+    </div>
+    <div class="g2" style="margin-top:12px">
+      <div><label for="f-tapel">Tahun pelajaran</label><input id="f-tapel" placeholder="2025/2026"></div>
+      <div><label for="f-kepsek">Nama kepala sekolah</label><input id="f-kepsek" placeholder="Untuk lembar pengesahan"></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="card" id="wadah-jur2">
+    <h3 id="lbl-jur2">Program keahlian</h3>
+    <p class="hint">Hapus contoh di bawah, ganti dengan yang benar-benar dipakai di sekolah Anda.</p>
+    <div id="daftar-jurusan"></div>
+    <div class="row" style="margin-top:10px">
+      <input id="f-jurbaru" placeholder="Nama program keahlian" style="max-width:340px">
+      <button class="act ghost sm" onclick="tambahJurusan()">Tambah</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Daftar mata pelajaran</h3>
+    <p class="hint">Struktur nasional sudah terisi. Sesuaikan bagian yang khas sekolah Anda — mapel keagamaan, muatan lokal, dan mata pelajaran pilihan. Centang untuk menandai mapel produktif. Penandaan ini hanya keterangan — mapel apa pun boleh dijadikan mapel utama.</p>
+    <div class="row" style="margin-bottom:12px">
+      <label style="margin:0">Tingkat</label>
+      <select id="f-aturtingkat" onchange="gambarAturMapel()" style="max-width:160px"></select>
+    </div>
+    <div id="daftar-mapel"></div>
+    <div class="row" style="margin-top:10px">
+      <input id="f-mapelbaru" aria-label="Nama mata pelajaran baru" placeholder="Nama mata pelajaran" style="max-width:320px">
+      <label style="display:flex;align-items:center;gap:6px;margin:0;font-weight:600">
+        <input type="checkbox" id="f-mapelprod" style="width:16px;height:16px;accent-color:var(--steel)"> produktif</label>
+      <button class="act ghost sm" onclick="tambahMapel()">Tambah</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Menduplikasi untuk sekolah lain</h3>
+    <p class="hint">Unduh pengaturan sekolah ini sebagai berkas, atau muat pengaturan dari sekolah lain. Berguna juga saat berpindah ke versi aplikasi yang lebih baru — pengaturan tidak perlu diketik ulang.</p>
+    <div class="row">
+      <button class="act ghost" onclick="unduhAtur()">Unduh pengaturan</button>
+      <label class="act ghost" style="cursor:pointer;margin:0">Muat pengaturan<input type="file" accept=".json" onchange="muatAtur(this)" style="display:none"></label>
+      <button class="act warn" onclick="proyekBaru()">Mulai proyek baru</button>
+      <button class="act warn" onclick="hapusTotal()">Kosongkan seluruh data</button>
+      <span class="pill" id="ver"></span>
+    </div>
+    <div class="notis w" style="margin-top:14px"><b>Yang tidak bisa diubah:</b> batas 3 sampai 5 mapel, lima tahap proyek, bobot 100 per mapel, tahap pertama formatif, batas 25 untuk nilai kelompok, dan aturan rubrik. Semua itu tertanam di dalam perintah job sheet. Kalau tiap sekolah bisa mematikannya, alat ini kehilangan gunanya.</div>
+  </div>
+</section>
+
+</div>
+<div class="tanya-latar" id="tanya" hidden role="dialog" aria-modal="true" aria-labelledby="tanya-teks"><div class="tanya"><p id="tanya-teks"></p><div class="row"><button class="act ghost" id="tanya-tidak">Batal</button><button class="act" id="tanya-ya">Lanjutkan</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const VERSI='2.1';
+const LOGO_BAWAAN='data:image/png;base64,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EQiBAK7VZwqlZGv6biWZkwpb34l1Ji3SRtNwPZtLSikJk2fr/wDnor/73e9cY2smEonI8KFDg0jwOmOYWkcZgZShpha6tBAokZiZnHMq6SfL89q1K1y8dOkdDWR978ns2nIrNi6+FkDETc+5hAagNkWlFqBdu9zV+48adezmzVv+FI1GnHO1Ckc6iChr7esDDzn4x0uWL2s28CyhMYwWSoTo827GjBn1XvajH/2oj+/7vVUQGFErQs8FGbtfhky2Rev861KOhdrISpARSBlqqjYNNV9RCk4+xpjN2tMvDOg1+M53Pnznk/A5mXIT30DVuUVgmwRs3br1tG2lZSMjnkfiRNIWnwuS1O2cnp37nPNacXFpW2DniQiMtX0mTpw4uqqsKuJpz6Y5eSg7O9t+ue7L9tPffOtGJupCO0IMEUSQSCY+cs7tTjy/ryVlBFKGdnDsE5Gz1nIkGvsXFD1HzunmnOSMCOfm5lb179J/5v/eeGbD0uXLkakQm6FmCjciAKVbt52iUqHBAk7lWANg65yfv++oH7z44osbxo0bp6dPn252UhgprTW2btr883env/2z0KmzYzlkItZag1PakdRodkJElDTJ5Kj993955apVKARcUWZKMwIpQ20rm5xziESjsz+b/9kzLb15Fmal+5Uywuhrenhxu+KZzoGYHaFGGKVb9vSSRUtOYubP2jJSUylFWilqAF2VELg7ZDt4bpikRmSNszoaiz3w8ssvfwaAizLaUUYgZWgXJVaKxApQoOZjvhqJkc0QLMVAQQHCaruZjfk112raIjKFpDbEVF779lXlZWXZdbDoAmalFEwy8fsDRo2aN3Pu3OfaUvsOcRTrd4TIDtFrjoicg2gr8sHI/Pzrli5bRntbtGVGIGVorzoDE0iKEVTPLUFJ8zZ+esGoDGU0pCYLG9UIJeucUz167HNDVWVFd2vslZyWqxKiDDillNq8acs/TjnllPnPPvvs8jby2bhGQHzrhmqziLAVx8aa97v16HHmc889tynjO0KbgYZmKEMZytBXoiGlaUrCzNi6dbP84ZZbCp3IkjRonrSKF2K1p3vPmzPnvsLCwkizc28aQUsIcek8EdGNNeucSiaT5ES+8GLRKUedfvoJM2bMWJsRRhkNKUNf06itXVndbW8NMtltEXPSigziNtKSApw8AYOzJ0yYUD18+PBLKsvK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';
+const TAHAP=['Menggali','Merancang','Mengerjakan','Menguji dan memperbaiki','Menyerahkan'];
+const MIN_TIM=3, MAX_TIM=5, MAKS_TOPIK=120, MAKS_TP=200, MAKS_KAIT=450, MAKS_CP=1200;
+const GENERIK=['kolaborasi','komunikasi','berpikir kritis','kreativitas','kerja sama','gotong royong','karakter','soft skill','abad 21'];
+
+const JENJANG={
+  SD:{ label:'SD / MI', tingkat:['I','II','III','IV','V','VI'], tingkatAwal:3,
+       fase:{I:'A',II:'A',III:'B',IV:'B',V:'C',VI:'C'},
+       pakaiJurusan:false, labelJurusan:'Tema kokurikuler', labelUtama:'mapel', contohMasalah:'Sampah plastik dari kantin menumpuk di belakang sekolah dan tidak pernah dipilah, sehingga petugas kebersihan kewalahan.',
+       jurusan:['Gaya Hidup Berkelanjutan','Kearifan Lokal','Bhinneka Tunggal Ika','Bangunlah Jiwa dan Raganya','Rekayasa dan Teknologi','Kewirausahaan'],
+       mapel:{
+         I:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],['Matematika',0],['PJOK',0],['Seni dan Budaya',0],['Bahasa Inggris',0],['Muatan Lokal',0]],II:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],['Matematika',0],['PJOK',0],['Seni dan Budaya',0],['Bahasa Inggris',0],['Muatan Lokal',0]],
+         III:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],['Matematika',0],['Ilmu Pengetahuan Alam dan Sosial (IPAS)',0],['PJOK',0],['Seni dan Budaya',0],['Bahasa Inggris',0],['Muatan Lokal',0]],IV:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],['Matematika',0],['Ilmu Pengetahuan Alam dan Sosial (IPAS)',0],['PJOK',0],['Seni dan Budaya',0],['Bahasa Inggris',0],['Muatan Lokal',0]],V:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],['Matematika',0],['Ilmu Pengetahuan Alam dan Sosial (IPAS)',0],['PJOK',0],['Seni dan Budaya',0],['Bahasa Inggris',0],['Muatan Lokal',0]],VI:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],['Matematika',0],['Ilmu Pengetahuan Alam dan Sosial (IPAS)',0],['PJOK',0],['Seni dan Budaya',0],['Bahasa Inggris',0],['Muatan Lokal',0]]},
+       catatan:{
+         I:['w','Kelas I masih belajar membaca dan berhitung. Proyek harus sangat pendek, berbasis benda nyata dan kegiatan fisik, dengan perintah satu langkah.'],
+         II:['w','Kelas II mulai lancar membaca. Pilih proyek singkat yang hasilnya bisa dipegang atau diperlihatkan langsung, dengan pendampingan guru di setiap tahap.'],
+         III:['i','Kelas III mulai mengenal IPAS dan bekerja berkelompok kecil. Proyek sederhana di lingkungan sekolah atau rumah sudah cocok.'],
+         IV:['i','Kelas IV adalah titik awal yang baik. Siswa sudah bisa menulis laporan singkat dan bekerja dalam kelompok tiga sampai empat orang.'],
+         V:['i','Kelas V sudah mampu mencari informasi dan membagi tugas. Proyek boleh melibatkan wawancara atau pengamatan di luar kelas.'],
+         VI:['w','Hati-hati di kelas VI. Periksa dulu jadwal asesmen akhir jenjang dan kegiatan perpisahan sebelum menetapkan jendela waktu proyek.']}
+     },
+  SMP:{ label:'SMP / MTs', tingkat:['VII','VIII','IX'], fase:{VII:'D',VIII:'D',IX:'D'},
+        pakaiJurusan:false, labelJurusan:'Tema kokurikuler', labelUtama:'mapel', contohMasalah:'Banyak siswa membuang makanan sisa dari kantin, padahal harga makanan naik dan uang jajan terbatas.',
+        jurusan:['Gaya Hidup Berkelanjutan','Kearifan Lokal','Bhinneka Tunggal Ika','Bangunlah Jiwa dan Raganya','Rekayasa dan Teknologi','Kewirausahaan'],
+        mapel:{
+          VII:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],
+               ['Matematika',0],['Ilmu Pengetahuan Alam',0],['Ilmu Pengetahuan Sosial',0],['Bahasa Inggris',0],
+               ['PJOK',0],['Informatika',0],['Seni dan Budaya',0],['Prakarya',0],['Muatan Lokal',0]],
+          VIII:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],
+                ['Matematika',0],['Ilmu Pengetahuan Alam',0],['Ilmu Pengetahuan Sosial',0],['Bahasa Inggris',0],
+                ['PJOK',0],['Informatika',0],['Seni dan Budaya',0],['Prakarya',0],['Muatan Lokal',0]],
+          IX:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],
+              ['Matematika',0],['Ilmu Pengetahuan Alam',0],['Ilmu Pengetahuan Sosial',0],['Bahasa Inggris',0],
+              ['PJOK',0],['Informatika',0],['Seni dan Budaya',0],['Prakarya',0],['Muatan Lokal',0]]},
+        catatan:{
+          VII:['i','Kelas VII paling lentur. Siswa baru mengenal cara belajar di SMP, jadi proyek pertama sebaiknya berdurasi pendek dengan produk yang sederhana tetapi benar-benar diserahkan ke orang lain.'],
+          VIII:['i','Kelas VIII adalah titik terbaik. Siswa sudah terbiasa dengan ritme sekolah dan belum tersita persiapan kelulusan.'],
+          IX:['w','Hati-hati di kelas IX. Periksa dulu jadwal asesmen akhir dan persiapan kelanjutan studi sebelum menetapkan jendela waktu proyek.']}
+      },
+  SMK:{ label:'SMK / MAK', tingkat:['X','XI','XII'], fase:{X:'E',XI:'F',XII:'F'},
+        pakaiJurusan:true, contohMasalah:'Pelanggan bengkel sering merasa disuruh mengganti komponen yang belum perlu, sehingga tidak percaya pada bengkel sekitar sekolah.', labelJurusan:'Program keahlian', labelUtama:'mapel',
+        jurusan:['Teknik Kendaraan Ringan Otomotif','Teknik Komputer dan Jaringan','Akuntansi dan Keuangan Lembaga'],
+        mapel:{
+          X:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],
+             ['Matematika',0],['Bahasa Inggris',0],['PJOK',0],['Sejarah',0],['Seni Budaya',0],
+             ['Informatika',0],['Projek IPAS',0],['Dasar-dasar Program Keahlian',1],['Muatan Lokal',0]],
+          XI:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],
+              ['Matematika',0],['Bahasa Inggris',0],['PJOK',0],['Konsentrasi Keahlian',1],
+              ['Projek Kreatif dan Kewirausahaan',1],['Mata Pelajaran Pilihan',0],['Muatan Lokal',0]],
+          XII:[['Pendidikan Agama dan Budi Pekerti',0],['Pendidikan Pancasila',0],['Bahasa Indonesia',0],
+               ['Matematika',0],['Bahasa Inggris',0],['Konsentrasi Keahlian',1],
+               ['Projek Kreatif dan Kewirausahaan',1],['Mata Pelajaran Pilihan',0],['Muatan Lokal',0]]},
+        catatan:{
+          X:['i','Kelas X punya paling banyak calon kolaborator, tetapi keahlian produktifnya baru sebatas Dasar-dasar Program Keahlian. Proyek yang cocok bersifat pengamatan dan pemetaan, belum layanan penuh.'],
+          XI:['i','Kelas XI adalah titik terbaik. Konsentrasi Keahlian sudah berjalan, PKK sudah ada, dan siswa belum tersedot PKL.'],
+          XII:['w','Kelas XII layak dipakai untuk proyek sumatif akhir jenjang, tetapi periksa dulu jadwal PKL dan uji kompetensi.']}
+      }
+};
+function infoMasalah(){
+  const el=document.getElementById('f-sumber'), n=document.getElementById('sisa-sumber');
+  if(el){ S.k.sumber=el.value; simpan(); }
+  if(el&&n) n.textContent=el.value.length+' / 300';
+  const ib=document.getElementById('info-masalah');
+  if(ib) ib.textContent=(S.k.sumber||'').trim()?'AI akan merancang proyek yang menjawab masalah di kartu pertama tab ini.':'Masalah di kartu pertama masih kosong, jadi AI akan mengusulkan sendiri dari lingkungan sekitar sekolah.';
+  if(typeof gambarPromptIde==='function') gambarPromptIde();
+}
+function barisJurusan(){ return J().pakaiJurusan ? J().labelJurusan.padEnd(17)+': '+(S.k.jurusan||'[isi]')+'\n' : ''; }
+function J(){ return JENJANG[S.jenjang]||JENJANG.SMP; }
+
+function kosong(jenjang){
+  const jj=jenjang||'SMP', J0=JENJANG[jj];
+  return { versi:VERSI, jenjang:jj,
+    sekolah:{nama:'',yayasan:'',kota:'',tapel:'',kepsek:''},
+    jurusan:[...J0.jurusan], mapel:JSON.parse(JSON.stringify(J0.mapel)),
+    k:{ jurusan:'', tingkat:J0.tingkat[J0.tingkatAwal!=null?J0.tingkatAwal:1], rombel:'', jendela:'', anggota:'4', bentuk:'Penugasan (jobsheet)', sumber:'' },
+    utama:{ mapel:'', guru:'', topik:'', tp:'', cp:'' }, dukung:[],
+    p:{ judul:'', masalah:'', produk:'', audiens:'' }, pilihTopik:[] };
+}
+/* Menormalkan data tersimpan (versi lama / berkas rusak) agar semua kolom ada */
+function normalisasi(d){
+  d=(d&&typeof d==='object')?d:{};
+  const jj=JENJANG[d.jenjang]?d.jenjang:(d.mapel&&(d.mapel.X||d.mapel.XI||d.mapel.XII)?'SMK':(d.mapel&&(d.mapel.I||d.mapel.IV||d.mapel.VI)?'SD':(d.k&&['X','XI','XII'].includes(d.k.tingkat)?'SMK':(d.k&&['I','II','III','IV','V','VI'].includes(d.k.tingkat)?'SD':'SMP'))));
+  const b=kosong(jj);
+  const n=Object.assign({},b,d,{jenjang:jj,versi:VERSI});
+  n.sekolah=Object.assign({},b.sekolah,d.sekolah||{}); delete n.sekolah.logo;
+  n.k=Object.assign({},b.k,d.k||{}); n.k.sumber=String(n.k.sumber==null?'':n.k.sumber).slice(0,300);
+  n.p=Object.assign({},b.p,d.p||{});
+  n.jurusan=Array.isArray(d.jurusan)&&d.jurusan.length?d.jurusan:b.jurusan;
+  n.mapel=(d.mapel&&typeof d.mapel==='object'&&Object.keys(d.mapel).length)?d.mapel:b.mapel;
+  JENJANG[jj].tingkat.forEach(t=>{ if(!Array.isArray(n.mapel[t])) n.mapel[t]=b.mapel[t]||[]; });
+  if(!JENJANG[jj].tingkat.includes(n.k.tingkat)) n.k.tingkat=b.k.tingkat;
+  const t=x=>String(x==null?'':x);
+  n.utama=Object.assign({mapel:'',guru:'',topik:'',tp:'',cp:''},d.utama||{});
+  ['mapel','guru','topik','tp','cp'].forEach(f=>n.utama[f]=t(n.utama[f]));
+  n.dukung=(Array.isArray(d.dukung)?d.dukung:[]).filter(x=>x&&typeof x==='object').map(x=>{
+    const y=Object.assign({mapel:'',guru:'',topik:'',tp:'',cp:'',kait:''},x);
+    ['mapel','guru','topik','tp','cp','kait'].forEach(f=>y[f]=t(y[f])); return y; });
+  n.pilihTopik=Array.isArray(d.pilihTopik)?d.pilihTopik:[];
+  return n;
+}
+let S=kosong();
+
+/* ===== Lapisan penyimpanan — satu-satunya tempat yang perlu diganti
+   saat pindah ke Google Apps Script (ganti isinya dengan google.script.run) ===== */
+const Simpanan={
+  kunci:'peracik-proyek-kolaborasi', tunda:null,
+  async baca(){ try{ const r=await window.storage.get(this.kunci); return r&&r.value?JSON.parse(r.value):null; }catch(e){ return null; } },
+  tulis(d){ clearTimeout(this.tunda); this.tunda=setTimeout(async()=>{ try{ await window.storage.set(this.kunci,JSON.stringify(d)); }catch(e){} },400); }
+};
+
+/* ---------- logo sekolah (permanen, tidak bisa diganti dari antarmuka) ---------- */
+function tampilLogo(){
+  const el=document.getElementById('logo-sekolah'); if(!el) return;
+  el.src=LOGO_BAWAAN; el.hidden=false;
+}
+function simpan(){ Simpanan.tulis(S); }
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function ja(s){ return String(s==null?'':s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+function mapelTingkat(){ return S.mapel[S.k.tingkat]||[]; }
+function tim(){ return S.utama.mapel ? [S.utama,...S.dukung] : [...S.dukung]; }
+
+function ke(n){
+  ['ide','peta','jobsheet','atur'].forEach(x=>{
+    document.getElementById('p-'+x).hidden=(x!==n);
+    document.getElementById('t-'+x).setAttribute('aria-selected',x===n);
+  });
+  if(n==='ide'){ gambarIde(); gambarPapan(); gambarPromptIde(); }
+  if(n==='peta') gambarPeta();
+  if(n==='jobsheet') gambarJob();
+  if(n==='atur'){ gambarJurusan(); gambarAturMapel(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function render(){
+  document.getElementById('ver').textContent='versi '+VERSI;
+  ['nama','yayasan','kota','tapel','kepsek'].forEach(k=>{
+    const id = k==='nama'?'f-sekolah':'f-'+k;
+    const el=document.getElementById(id); if(el) el.value=S.sekolah[k]||'';
+  });
+  ['rombel','jendela','sumber'].forEach(k=>{ const el=document.getElementById('f-'+k); if(el) el.value=S.k[k]||''; });
+  { const rb=document.getElementById('f-rombel'); if(rb){ const t=S.k.tingkat; rb.placeholder=S.jenjang==='SMK'?t+' TJKT 1, '+t+' TJKT 2':t+' A, '+t+' B'; } }
+  { const sm=document.getElementById('f-sumber'); if(sm) sm.placeholder=J().contohMasalah; const cm=document.getElementById('contoh-masalah'); if(cm) cm.textContent='Contoh: '+J().contohMasalah; infoMasalah(); }
+  ['judul','masalah','produk','audiens'].forEach(k=>{ const el=document.getElementById('f-'+k); if(el) el.value=S.p[k]||''; });
+  const jt=J().tingkat;
+  document.getElementById('f-tingkat').innerHTML=jt.map(t=>`<option value="${t}">Kelas ${t}</option>`).join('');
+  document.getElementById('f-tingkat').value=S.k.tingkat;
+  document.getElementById('f-aturtingkat').innerHTML=jt.map(t=>`<option value="${t}">Kelas ${t}</option>`).join('');
+  document.getElementById('lbl-jurusan').textContent=J().labelJurusan;
+  ['wadah-jurusan','wadah-jur2'].forEach(id=>{ const e=document.getElementById(id); if(e) e.hidden=!J().pakaiJurusan; });
+  document.getElementById('f-jenjang').value=S.jenjang;
+  document.getElementById('f-anggota').value=S.k.anggota;
+  document.getElementById('f-bentuk').value=S.k.bentuk;
+  judul(); tampilLogo(); gambarIde(); gambarPapan(); gambarPromptIde();
+}
+function judul(){
+  const t=[S.sekolah.nama,S.sekolah.kota].filter(Boolean).join(' · ');
+  document.getElementById('kicker').textContent = t?t.toUpperCase():'PROYEK KOLABORASI ANTAR MATA PELAJARAN';
+}
+function setK(f,v){ S.k[f]=v; if(f!=='anggota'&&f!=='bentuk') gambarIde(); gambarJob(); simpan(); }
+document.addEventListener('input',e=>{
+  const id=e.target.id; if(!id) return;
+  const peta={'f-sekolah':'nama','f-yayasan':'yayasan','f-kota':'kota','f-tapel':'tapel','f-kepsek':'kepsek'};
+  if(peta[id]){ S.sekolah[peta[id]]=e.target.value; judul(); simpan(); return; }
+  const k=id.slice(2);
+  if(k in S.k){ S.k[k]=e.target.value; simpan(); return; }
+  if(k in S.p){ S.p[k]=e.target.value; simpan(); return; }
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='f-tingkat'){
+    S.k.tingkat=e.target.value; S.utama={mapel:'',guru:'',topik:'',tp:'',cp:''}; S.dukung=[]; S.pilihTopik=[];
+    gambarIde(); gambarPapan(); gambarPromptIde(); simpan();
+    pesan('Tingkat diganti — daftar mapel berbeda, jadi isian mapel dikosongkan.');
+  }
+  if(e.target.id==='f-jurusan'){ S.k.jurusan=e.target.value; gambarPromptIde(); simpan(); }
+});
+
+/* ---------- 1 ide ---------- */
+function gambarIde(){
+  const sj=document.getElementById('f-jurusan');
+  sj.innerHTML='<option value="">— pilih —</option>'+S.jurusan.map(j=>`<option${j===S.k.jurusan?' selected':''}>${esc(j)}</option>`).join('');
+  const c=J().catatan[S.k.tingkat]||['i',''];
+  document.getElementById('notis-tingkat').innerHTML=`<div class="notis ${c[0]}">${c[1]}</div>`;
+
+  const semua=mapelTingkat();
+  const utamaProd=semua.some(m=>m[0]===S.utama.mapel&&m[1]===1);
+  document.getElementById('isi-utama').innerHTML=`
+    <div class="blok utama">
+      <div class="top"><span class="tag">Mapel utama · jangkar proyek${utamaProd?' · produktif':''}</span></div>
+      <div class="g3">
+        <div><label>Mata pelajaran</label>
+          <select onchange="setUtama('mapel',this.value)">
+            <option value="">— pilih mapel —</option>
+            ${semua.map(m=>`<option value="${esc(m[0])}"${m[0]===S.utama.mapel?' selected':''}>${esc(m[0])}${m[1]?' (produktif)':''}</option>`).join('')}
+          </select></div>
+        <div><label>Guru pengampu</label><input aria-label="Guru pengampu mapel jangkar" value="${esc(S.utama.guru)}" placeholder="Boleh lebih dari satu, pisahkan koma" oninput="setUtama('guru',this.value)"></div>
+        <div><label>Topik yang sedang berjalan</label>
+          <input aria-label="Topik mapel jangkar" value="${esc(S.utama.topik)}" maxlength="${MAKS_TOPIK}" placeholder="Servis berkala sepeda motor" oninput="setUtama('topik',this.value)">
+          <div class="sisa">${S.utama.topik.length} / ${MAKS_TOPIK}</div></div>
+      </div>
+    </div>`;
+
+  const dipakai=tim().map(x=>x.mapel);
+  const sisa=mapelTingkat().filter(m=>!dipakai.includes(m[0]));
+  document.getElementById('f-tambahmapel').innerHTML = sisa.length
+    ? sisa.map(m=>`<option value="${esc(m[0])}">${esc(m[0])}${m[1]?' (produktif)':''}</option>`).join('')
+    : '<option value="">— semua mapel sudah dipakai —</option>';
+
+  document.getElementById('isi-dukung').innerHTML = S.dukung.length ? S.dukung.map((d,i)=>`
+    <div class="blok">
+      <div class="top"><h3>${esc(d.mapel)}</h3><button class="act warn sm" onclick="hapusDukung(${i})">Keluarkan</button></div>
+      <div class="g2">
+        <div><label>Guru pengampu</label><input aria-label="Guru pengampu mapel pendukung" value="${esc(d.guru)}" placeholder="Nama guru" oninput="setDukung(${i},'guru',this.value)"></div>
+        <div><label>Topik yang sedang berjalan</label>
+          <input aria-label="Topik mapel pendukung" value="${esc(d.topik)}" maxlength="${MAKS_TOPIK}" placeholder="Statistika: penyajian data" oninput="setDukung(${i},'topik',this.value)">
+          <div class="sisa">${d.topik.length} / ${MAKS_TOPIK}</div></div>
+      </div>
+    </div>`).join('') : `<div class="kosong"><b>Belum ada mapel pendukung</b>Pilih dari daftar di bawah. Dua sampai empat mapel, tidak lebih.</div>`;
+
+  const n=tim().length;
+  const adaProd=tim().some(m=>mapelTingkat().some(x=>x[0]===m.mapel&&x[1]===1));
+  const cat=document.getElementById('notis-produktif');
+  if(cat) cat.innerHTML = (n>=MIN_TIM&&!adaProd)
+    ? `<div class="notis k">Tim ini tidak melibatkan mapel produktif, dan itu boleh saja — banyak proyek kolaborasi yang baik memang antar mapel umum. Yang tetap perlu dipastikan: produk akhirnya diterima orang di luar sekolah, bukan berhenti sebagai tugas yang dikumpulkan ke guru.</div>` : '';
+  const el=document.getElementById('jml-mapel');
+  el.textContent = n+' mapel'+(n<MIN_TIM?' — minimal '+MIN_TIM:(n>MAX_TIM?' — maksimal '+MAX_TIM:''));
+  el.className = 'pill '+(n>=MIN_TIM&&n<=MAX_TIM?'ok':'warn');
+  gambarPromptIde();
+}
+function setUtama(f,v){
+  S.utama[f]=v;
+  if(f==='mapel'){ gambarIde(); gambarPapan(); }
+  else if(f==='topik'){ gambarPapan(); gambarPromptIde(); document.querySelector('.blok.utama .sisa').textContent=v.length+' / '+MAKS_TOPIK; }
+  else gambarPromptIde();
+  simpan();
+}
+function setDukung(i,f,v){
+  S.dukung[i][f]=v;
+  if(f==='topik') gambarPapan();
+  gambarPromptIde(); simpan();
+}
+function tambahDukung(){
+  const raw=document.getElementById('f-tambahmapel').value; if(!raw) return;
+  const nama=raw.trim();
+  if(tim().length>=MAX_TIM) return pesan('Maksimal '+MAX_TIM+' mapel per proyek. Simpan mapel ini untuk proyek berikutnya di angkatan yang sama.');
+  S.dukung.push({mapel:nama,guru:'',topik:'',tp:'',cp:'',kait:''});
+  gambarIde(); gambarPapan(); simpan();
+}
+function hapusDukung(i){ S.dukung.splice(i,1); gambarIde(); gambarPapan(); simpan(); }
+
+function modeIde(m){
+  document.getElementById('box-papan').hidden=m!=='papan';
+  document.getElementById('box-ai').hidden=m!=='ai';
+  document.getElementById('m-papan').className='act'+(m==='papan'?'':' ghost');
+  document.getElementById('m-ai').className='act'+(m==='ai'?'':' ghost');
+}
+function gambarPapan(){
+  const list=tim().filter(m=>m.topik&&m.topik.trim());
+  const box=document.getElementById('papan-topik');
+  if(!list.length){ box.innerHTML=`<div class="kosong" style="grid-column:1/-1"><b>Belum ada topik</b>Isi kolom topik pada mapel utama dan pendukung di atas.</div>`;
+    document.getElementById('pemantik').innerHTML=''; return; }
+  box.innerHTML=list.map(m=>`
+    <div class="kartuTopik ${S.pilihTopik.includes(m.mapel)?'pilih':''}" onclick="toggleTopik('${ja(m.mapel)}')">
+      <div class="m">${esc(m.mapel)}</div><div class="t">${esc(m.topik)}</div></div>`).join('');
+  gambarPemantik();
+}
+function toggleTopik(m){
+  S.pilihTopik = S.pilihTopik.includes(m) ? S.pilihTopik.filter(x=>x!==m) : [...S.pilihTopik,m];
+  gambarPapan(); simpan();
+}
+function gambarPemantik(){
+  const el=document.getElementById('pemantik');
+  const dip=tim().filter(m=>S.pilihTopik.includes(m.mapel)&&m.topik.trim());
+  if(dip.length<2){ el.innerHTML=`<p class="hint" style="margin-top:14px">Pilih sedikitnya dua topik untuk memunculkan pertanyaan pemantik.</p>`; return; }
+  el.innerHTML=`<div class="notis i" style="margin-top:16px">
+    <b>Irisan: ${esc(dip.map(m=>m.topik).join('  +  '))}</b><br><br>
+    1. Masalah apa di sekitar sekolah yang menyentuh semua topik ini sekaligus?<br>
+    2. Siapa yang dirugikan kalau masalah itu dibiarkan?<br>
+    3. Apa yang bisa siswa serahkan langsung kepada orang tersebut?<br><br>
+    Jawab bertiga atau berempat, lalu tulis hasilnya di kolom proyek terpilih di bawah.</div>`;
+}
+function daftarMapelTeks(){
+  const t=tim();
+  if(!t.length) return '- [kembali ke atas, pilih mapel dan isi topiknya]';
+  const prod=nm=>mapelTingkat().some(x=>x[0]===nm&&x[1]===1);
+  return t.map((m,i)=>`- ${m.mapel}${i===0?' [MAPEL UTAMA]':''}${prod(m.mapel)?' (produktif)':''}: ${m.topik||'[topik belum diisi]'}`).join('\n');
+}
+function gambarPromptIde(){
+  const el=document.getElementById('teks-ide'); if(!el) return;
+  const sum=(S.k.sumber||'').trim();
+  el.textContent=
+`Anda perancang pembelajaran ${S.jenjang} yang berpengalaman menyusun proyek
+lintas mata pelajaran.
+
+KONTEKS
+Sekolah          : ${S.sekolah.nama||'[isi]'}
+${barisJurusan()}Tingkat          : Kelas ${S.k.tingkat}
+Rombel           : ${S.k.rombel||'[isi]'}
+Jendela waktu    : ${S.k.jendela||'[isi]'}
+${sum?'Masalah yang ingin diangkat: '+sum:'Masalah: silakan Anda usulkan dari lingkungan sekitar sekolah.'}
+
+Mata pelajaran yang tersedia beserta topik yang sedang berjalan:
+${daftarMapelTeks()}
+
+TUGAS
+Usulkan 3 proyek. Untuk tiap proyek tulis dengan urutan persis ini:
+1. Judul proyek
+2. Masalah nyata yang diselesaikan, sebutkan siapa yang dirugikan
+   bila masalah itu dibiarkan
+3. Produk atau unjuk kerja yang dihasilkan siswa
+4. Audiens penerima hasil, di luar sekolah
+5. Peran tiap mata pelajaran di atas, satu baris per mapel
+6. Mapel yang menurut Anda sebaiknya tidak diikutsertakan, beserta
+   alasan singkatnya
+
+ATURAN
+- Mapel utama adalah jangkar proyek. Arah proyek ditentukan oleh
+  topiknya, dan mapel lain menyambung ke sana. Mapel utama tidak
+  harus mapel produktif.
+- Peran tiap mapel harus sedemikian rupa sehingga bila perannya
+  dicabut, proyeknya menjadi pincang. Dilarang memberi peran yang
+  isinya hanya membuat laporan, mendokumentasikan, atau
+  mempresentasikan.
+- Peran wajib memakai topik yang tertulis di daftar di atas.
+  Jangan mengarang topik lain.
+- Proyek tidak boleh selesai hanya dengan mengetik di komputer.
+  Harus menuntut alat, bahan, data lapangan, atau orang sungguhan.
+- Total tagihan siswa harus lebih ringan dibanding bila tiap mapel
+  memberi tugas sendiri-sendiri. Satu tagihan untuk banyak
+  kecakapan.
+- Bahasa Indonesia sederhana. Tanpa kata pengantar dan penutup.`;
+}
+
+/* ---------- 2 peta keterkaitan ---------- */
+function kalimatGenerik(t){
+  const s=(t||'').toLowerCase().trim();
+  if(!s) return '';
+  const ada=GENERIK.filter(g=>s.includes(g));
+  return ada.length?ada.join(', '):'';
+}
+function gambarPeta(){
+  const box=document.getElementById('isi-peta'), t=tim();
+  if(!t.length||!S.utama.mapel){
+    box.innerHTML=`<div class="kosong"><b>Mapelnya belum ditentukan</b>Kembali ke langkah 1 dan pilih mapel utama beserta pendukungnya.</div>`;
+    document.getElementById('palang-peta').innerHTML='';
+    document.getElementById('kartu-bantuan').hidden=true;
+    document.getElementById('kartu-tp').hidden=true; return;
+  }
+  document.getElementById('kartu-bantuan').hidden=false;
+  document.getElementById('kartu-tp').hidden=false;
+  box.innerHTML=t.map((m,i)=>{
+    return `<div class="blok ${i===0?'utama':''}">
+      <div class="top"><div><h3>${esc(m.mapel)}</h3>
+        <span class="tag">${i===0?'mapel utama':'pendukung'}${m.topik?' · topik: '+esc(m.topik):''}</span></div></div>
+      <div><label>Tujuan pembelajaran yang diangkat dalam proyek ini</label>
+        <textarea rows="2" maxlength="${MAKS_TP}" placeholder="${i===0?'Siswa mampu melakukan servis berkala sepeda motor sesuai prosedur pabrikan pada kondisi kerusakan yang berbeda-beda.':'Persempit topik di atas menjadi satu tujuan yang benar-benar dipakai dalam proyek ini.'}" oninput="setTp(${i},this.value)">${esc(m.tp)}</textarea>
+        <div class="sisa ${m.tp.length>MAKS_TP-20?'habis':''}">${m.tp.length} / ${MAKS_TP}</div></div>
+      ${i>0?`<div style="margin-top:12px"><label>Kalimat keterkaitan — satu paragraf, jelaskan bagaimana tujuan ini menopang mapel utama</label>
+        <textarea rows="4" maxlength="${MAKS_KAIT}" placeholder="Tujuan pembelajaran Bahasa Indonesia tentang teks prosedur dipakai siswa untuk menyusun lembar hasil pemeriksaan yang dapat dimengerti pemilik motor yang awam soal mesin, memakai kalimat perintah yang runtut dan istilah teknis yang dijelaskan. Tanpa itu, hasil pemeriksaan yang sudah benar secara teknis tetap tidak bisa dipakai pemilik motor untuk memutuskan komponen mana yang perlu diganti." oninput="setKait(${i},this.value)">${esc(m.kait)}</textarea>
+        <div class="sisa ${(m.kait||'').length>MAKS_KAIT-30?'habis':''}">${(m.kait||'').length} / ${MAKS_KAIT}</div>
+        <div id="warn-${i}">${peringatanKait(m)}</div>
+      </div>`:''}
+    </div>`;
+  }).join('');
+  gambarPalangPeta(); gambarCpList(); gambarPromptTp(); gambarPromptKait();
+}
+function setTp(i,v){ tim()[i].tp=v; gambarPalangPeta(); gambarJob(); simpan();
+  const s=document.querySelectorAll('#isi-peta .blok')[i].querySelector('.sisa'); if(s) s.textContent=v.length+' / '+MAKS_TP; }
+function gambarPromptKait(){
+  const el=document.getElementById('teks-kait'); if(!el) return;
+  const u=S.utama;
+  const daftar = S.dukung.length
+    ? S.dukung.map(d=>`- ${d.mapel}\n  Topik   : ${d.topik||'[belum diisi]'}\n  Tujuan  : ${d.tp||'[belum diisi]'}`).join('\n')
+    : '- [belum ada mapel pendukung]';
+  el.textContent=
+`Anda perancang pembelajaran ${S.jenjang}. Bantu saya menuliskan kalimat
+keterkaitan antar mata pelajaran dalam sebuah proyek kolaborasi.
+
+PROYEK
+Judul   : ${S.p.judul||'[isi]'}
+Masalah : ${S.p.masalah||'[isi]'}
+Produk  : ${S.p.produk||'[isi]'}
+Audiens : ${S.p.audiens||'[isi]'}
+Kelas   : ${S.k.tingkat} ${S.k.jurusan||''}
+
+MAPEL UTAMA (jangkar proyek)
+${u.mapel||'[isi]'}
+  Topik  : ${u.topik||'[belum diisi]'}
+  Tujuan : ${u.tp||'[belum diisi]'}
+
+MAPEL PENDUKUNG
+${daftar}
+
+TUGAS
+Untuk SETIAP mapel pendukung, tulis satu paragraf keterkaitan yang
+menjelaskan bagaimana tujuan pembelajaran mapel itu menopang tujuan
+mapel utama dalam proyek ini.
+
+Keluarkan HANYA dalam format ini, satu blok per mapel, tanpa
+kalimat lain sebelum maupun sesudahnya:
+
+MAPEL: <nama mapel persis seperti di daftar>
+KETERKAITAN: <satu paragraf, 3 sampai 4 kalimat>
+
+ISI PARAGRAF, berurutan:
+1. Bagian sempit dari topik mapel itu yang benar-benar dipakai.
+2. Tindakan nyata yang siswa kerjakan di proyek ini. Sebutkan
+   tindakannya, bendanya, dan bila memungkinkan jumlahnya.
+3. Apa yang menjadi mungkin pada mapel utama karena tindakan itu.
+4. Satu kalimat penutup: apa yang gagal tercapai kalau bagian ini
+   tidak ada.
+
+ATURAN
+- Mulai dengan "Tujuan pembelajaran [nama mapel] tentang ..."
+- Dilarang memakai kata: kolaborasi, komunikasi, berpikir kritis,
+  kreativitas, kerja sama, gotong royong, karakter, soft skill.
+  Kalimat yang benar untuk semua proyek tidak menjelaskan apa pun
+  tentang proyek ini.
+- Dilarang memakai frasa manfaat umum seperti menarik pelanggan,
+  meningkatkan kualitas, menambah wawasan. Sebutkan akibat yang
+  bisa ditunjuk pada mapel utama.
+- Panjang tiap paragraf 350 sampai 400 huruf.
+- Bila sebuah mapel pendukung sulit dikaitkan secara nyata, tulis
+  KETERKAITAN: SULIT DIKAITKAN, lalu jelaskan alasannya dalam satu
+  kalimat. Jangan dipaksakan.
+- Bahasa Indonesia sederhana.`;
+}
+function isikanDariAI(){
+  const el=document.getElementById('f-tempel');
+  const teks=(el.value||'').trim();
+  if(!teks) return pesan('Tempel dulu jawaban AI-nya di kotak itu.');
+  const baris=teks.split('\n')
+    .map(l=>l.replace(/\*\*/g,'').replace(/^[\s>*\-–—•]+/,'').replace(/^\d+[.)]\s*/,'').trim())
+    .filter(Boolean);
+  const cari=nm=>{
+    const n=nm.toLowerCase().trim();
+    return S.dukung.find(d=>d.mapel.toLowerCase().trim()===n)
+        || S.dukung.find(d=>n.includes(d.mapel.toLowerCase().trim()))
+        || S.dukung.find(d=>d.mapel.toLowerCase().trim().includes(n));
+  };
+  let cur=null, terisi=0, sulit=[];
+  baris.forEach(l=>{
+    const m=l.match(/^(mapel|keterkaitan|kalimat keterkaitan)\b[^:]*:\s*(.*)$/i);
+    if(!m){ if(cur&&cur.__lanjut&&l.length>3){ cur.kait=(cur.kait+' '+l).slice(0,MAKS_KAIT); } return; }
+    const kunci=m[1].toLowerCase().replace('kalimat ',''), nilai=m[2].trim();
+    if(kunci==='mapel'){ cur=cari(nilai); if(cur) cur.__lanjut=false; return; }
+    if(!cur||!nilai) return;
+    if(/^sulit dikaitkan/i.test(nilai)){ sulit.push(cur.mapel); cur.__lanjut=false; return; }
+    cur.kait=nilai.slice(0,MAKS_KAIT); cur.__lanjut=true; terisi++;
+  });
+  S.dukung.forEach(d=>{ delete d.__lanjut; });
+  if(!terisi&&!sulit.length) return pesan('Tidak ada baris yang dikenali. Pastikan jawaban AI memakai label MAPEL, TENTANG, UNTUK, dan SEHINGGA.');
+  gambarPeta(); gambarJob(); simpan();
+  const catatan = sulit.length ? ' AI menandai sulit dikaitkan: '+sulit.join(', ')+'. Pertimbangkan mengeluarkannya dari proyek ini.' : '';
+  pesan(terisi+' bagian terisi. Periksa dan perbaiki sebelum lanjut.'+catatan);
+}
+function cariMapel(nm,daftar){
+  const n=nm.toLowerCase().trim();
+  return daftar.find(d=>d.mapel.toLowerCase().trim()===n)
+      || daftar.find(d=>n.includes(d.mapel.toLowerCase().trim()))
+      || daftar.find(d=>d.mapel.toLowerCase().trim().includes(n));
+}
+function setCp(i,v){ const d=tim()[i]; if(!d) return; d.cp=v.slice(0,MAKS_CP); gambarPromptTp(); simpan();
+  const s=document.querySelectorAll('#cp-list .sisa')[i]; if(s) s.textContent=d.cp.length+' / '+MAKS_CP; }
+function gambarCpList(){
+  const el=document.getElementById('cp-list'); if(!el) return;
+  el.innerHTML=tim().map((m,i)=>`
+    <div style="margin-bottom:12px">
+      <label>Capaian Pembelajaran — ${esc(m.mapel)}${i===0?' (mapel utama)':''}</label>
+      <textarea rows="3" maxlength="${MAKS_CP}" placeholder="Tempel Capaian Pembelajaran fase ${J().fase[S.k.tingkat]||''} untuk mapel ini, apa adanya dari dokumen resmi." oninput="setCp(${i},this.value)">${esc(m.cp||'')}</textarea>
+      <div class="sisa">${(m.cp||'').length} / ${MAKS_CP}</div>
+    </div>`).join('');
+}
+function gambarPromptTp(){
+  const el=document.getElementById('teks-tp'); if(!el) return;
+  const belum=tim().filter(m=>!(m.cp||'').trim()).map(m=>m.mapel);
+  const nc=document.getElementById('notis-cp');
+  if(nc) nc.innerHTML = belum.length
+    ? `<div class="notis w">Capaian Pembelajaran belum ditempel untuk: <b>${esc(belum.join(', '))}</b>. Kalau perintah ini dijalankan sekarang, AI akan menolak merumuskan tujuan untuk mapel tersebut. Isi dulu kotaknya.</div>`
+    : `<div class="notis k">Semua Capaian Pembelajaran sudah terisi. Tempel perintah di bawah ke <b>jendela percakapan yang baru</b> — bukan ke percakapan yang sudah dipakai untuk perintah lain, karena isi percakapan lama bisa terbaca dan mengacaukan hasilnya.</div>`;
+  const daftar=tim().map((m,i)=>
+`${i+1}. ${m.mapel}${i===0?'  [MAPEL UTAMA]':''}
+   Topik berjalan: ${m.topik||'[belum diisi]'}
+   Capaian Pembelajaran:
+   ${(m.cp||'[tempel Capaian Pembelajaran mapel ini]').replace(/\n/g,'\n   ')}`).join('\n\n');
+  el.textContent=
+`Anda perancang pembelajaran ${S.jenjang}. Bantu saya memilih dan merumuskan
+tujuan pembelajaran yang tepat untuk sebuah proyek kolaborasi antar
+mata pelajaran.
+
+PROYEK
+Judul   : ${S.p.judul||'[isi]'}
+Masalah : ${S.p.masalah||'[isi]'}
+Produk  : ${S.p.produk||'[isi]'}
+Audiens : ${S.p.audiens||'[isi]'}
+Kelas   : ${S.k.tingkat} ${S.k.jurusan||''}
+Jendela : ${S.k.jendela||'[isi]'}
+
+MATA PELAJARAN DAN CAPAIAN PEMBELAJARANNYA
+${daftar}
+
+TUGAS
+Untuk SETIAP mata pelajaran di atas, rumuskan SATU tujuan
+pembelajaran yang memenuhi tiga syarat sekaligus:
+(a) benar-benar tercakup dalam Capaian Pembelajaran yang saya
+    tempelkan, bukan tambahan dari luar;
+(b) sesuai topik yang sedang berjalan pada mapel itu;
+(c) bisa dinilai lewat pekerjaan siswa dalam proyek ini.
+
+Keluarkan HANYA dalam format ini, satu blok per mapel, tanpa
+kalimat lain sebelum maupun sesudahnya:
+
+MAPEL: <nama mapel persis seperti di daftar>
+TUJUAN: <satu kalimat, maksimal 200 huruf>
+CATATAN: <sebutkan bagian mana dari Capaian Pembelajaran yang
+dipakai, dalam satu kalimat>
+
+ATURAN
+- Periksa lebih dulu apakah topik proyek memang tercakup dalam
+  Capaian Pembelajaran mapel tersebut. Bila TIDAK, tulis
+  TUJUAN: TIDAK TERCAKUP, lalu jelaskan alasannya pada baris
+  CATATAN. Jangan memaksakan rumusan.
+- Jangan menyalin Capaian Pembelajaran mentah-mentah. Capaian
+  ditulis untuk satu fase penuh, sedangkan tujuan pembelajaran
+  harus lebih sempit dan bisa dicapai dalam jendela waktu di atas.
+- Dilarang memakai kata kerja yang tidak terukur: memahami,
+  mengetahui, menyadari, menghayati, mengerti.
+- Rumusan wajib menyebut apa yang siswa lakukan dan pada objek apa.
+- Jangan mengarang isi Capaian Pembelajaran yang tidak saya
+  tempelkan. Bila kolom itu kosong, tulis TUJUAN: CP BELUM DITEMPEL.
+- Bahasa Indonesia sederhana. Tanpa kata pengantar dan penutup.`;
+}
+function isikanTpDariAI(){
+  const el=document.getElementById('f-tempeltp');
+  const teks=(el.value||'').trim();
+  if(!teks) return pesan('Tempel dulu jawaban AI-nya di kotak itu.');
+  const baris=teks.split('\n')
+    .map(l=>l.replace(/\*\*/g,'').replace(/^[\s>*\-–—•]+/,'').replace(/^\d+[.)]\s*/,'').trim())
+    .filter(Boolean);
+  const t=tim();
+  let cur=null, terisi=0, gagal=[];
+  baris.forEach(l=>{
+    const m=l.match(/^(mapel|tujuan pembelajaran|tujuan|catatan)\b[^:]*:\s*(.*)$/i);
+    if(!m) return;
+    const kunci=m[1].toLowerCase().startsWith('tujuan')?'tujuan':m[1].toLowerCase();
+    const nilai=m[2].trim();
+    if(kunci==='mapel'){ cur=cariMapel(nilai,t); return; }
+    if(kunci==='catatan'||!cur||!nilai) return;
+    if(/^(tidak tercakup|cp belum ditempel)/i.test(nilai)){ gagal.push(cur.mapel); return; }
+    cur.tp=nilai.slice(0,MAKS_TP); terisi++;
+  });
+  if(!terisi&&!gagal.length) return pesan('Tidak ada baris yang dikenali. Pastikan jawaban AI memakai label MAPEL dan TUJUAN.');
+  gambarPeta(); gambarJob(); simpan();
+  const catatan = gagal.length ? ' AI menandai tidak tercakup: '+gagal.join(', ')+'. Periksa lagi CP-nya atau keluarkan mapel itu.' : '';
+  pesan(terisi+' tujuan pembelajaran terisi. Cocokkan dengan ATP Anda sebelum lanjut.'+catatan);
+}
+function peringatanKait(d){
+  const t=(d.kait||'').trim();
+  if(!t) return '';
+  const gen=kalimatGenerik(t);
+  if(gen) return `<div class="notis b" style="margin-top:8px">Ada kata umum di sini (${esc(gen)}). Periksa kembali: apakah paragraf ini masih menjelaskan sesuatu kalau kata itu dihapus? Kalimat yang benar untuk semua proyek tidak menjelaskan apa pun tentang proyek ini.</div>`;
+  if(t.length<80) return `<div class="notis w" style="margin-top:8px">Masih terlalu pendek. Sebutkan tindakan nyata siswa, bendanya, dan apa yang gagal tercapai di mapel utama kalau bagian ini tidak ada.</div>`;
+  return '';
+}
+function setKait(i,v){
+  const d=tim()[i]; if(!d) return;
+  d.kait=v;
+  const blok=document.querySelectorAll('#isi-peta .blok')[i];
+  if(blok){ const s=blok.querySelectorAll('.sisa')[1] || blok.querySelector('.sisa');
+    if(s) s.textContent=v.length+' / '+MAKS_KAIT; }
+  const w=document.getElementById('warn-'+i); if(w) w.innerHTML=peringatanKait(d);
+  gambarPalangPeta(); gambarJob(); simpan();
+}
+function gambarPalangPeta(){
+  const t=tim(), n=t.length;
+  const adaUtama=!!(S.utama.mapel&&S.utama.tp.trim());
+  const belumTp=t.filter(m=>!m.tp.trim()).length;
+  const belumKait=S.dukung.filter(d=>!d.kait.trim()).length;
+  const gen=S.dukung.filter(d=>kalimatGenerik(d.kait||'')).length;
+  const adaProyek=!!(S.p.judul.trim()&&S.p.masalah.trim()&&S.p.audiens.trim());
+  const ok=adaUtama&&adaProyek&&n>=MIN_TIM&&n<=MAX_TIM&&!belumTp&&!belumKait&&!gen;
+  document.getElementById('palang-peta').innerHTML=`
+    <div class="palang">
+      <div class="${adaProyek?'v':'x'}">${adaProyek?'✓':'✕'} Judul, masalah, dan audiens proyek sudah terisi</div>
+      <div class="${adaUtama?'v':'x'}">${adaUtama?'✓':'✕'} Mapel utama punya tujuan pembelajaran</div>
+      <div class="${n>=MIN_TIM&&n<=MAX_TIM?'v':'x'}">${n>=MIN_TIM&&n<=MAX_TIM?'✓':'✕'} Jumlah mapel ${n}${n<MIN_TIM?' — kurang dari '+MIN_TIM:(n>MAX_TIM?' — lebih dari '+MAX_TIM:'')}</div>
+      <div class="${!belumTp?'v':'x'}">${!belumTp?'✓':'✕'} Semua mapel punya tujuan pembelajaran${belumTp?' — '+belumTp+' belum':''}</div>
+      <div class="${!belumKait?'v':'x'}">${!belumKait?'✓':'✕'} Semua kalimat keterkaitan terisi${belumKait?' — '+belumKait+' belum':''}</div>
+      <div class="${!gen?'v':'x'}">${!gen?'✓':'✕'} Tidak ada keterkaitan yang hanya berisi kata umum${gen?' — '+gen+' perlu diperbaiki':''}</div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <span class="pill ${ok?'ok':'warn'}">${ok?'Peta siap':'Masih ada yang perlu dibereskan'}</span>
+      <button class="act ghost" onclick="ke('jobsheet')">Lanjut ke perintah job sheet →</button>
+    </div>`;
+}
+
+/* ---------- 3 perintah job sheet ---------- */
+function gambarJob(){
+  const el=document.getElementById('teks-job'); if(!el) return;
+  const t=tim();
+  const daftar = t.length ? t.map((m,i)=>
+`${i+1}. ${m.mapel}${i===0?'  [MAPEL UTAMA]':''}
+   Guru           : ${m.guru||'[isi]'}
+   Topik          : ${m.topik||'[isi]'}
+   Tujuan belajar : ${m.tp||'[isi]'}${i>0?`
+   Keterkaitan    : ${m.kait||'[isi]'}`:''}`).join('\n\n') : '[kembali ke langkah 1 dan 2, isi mapel beserta tujuan pembelajarannya]';
+
+  el.textContent=
+`Anda penyusun dokumen kurikulum ${S.jenjang} yang berpengalaman membuat
+sheet penugasan proyek. Susun satu dokumen job sheet lengkap
+berdasarkan data di bawah ini. Jangan mengarang data yang tidak
+tertulis; bila ada yang kurang, tandai dengan [perlu dilengkapi].
+
+=== DATA SEKOLAH ===
+Sekolah         : ${S.sekolah.nama||'[isi]'}
+Yayasan         : ${S.sekolah.yayasan||'-'}
+Kota            : ${S.sekolah.kota||'[isi]'}
+Tahun pelajaran : ${S.sekolah.tapel||'[isi]'}
+Kepala sekolah  : ${S.sekolah.kepsek||'[isi]'}
+
+=== DATA PROYEK ===
+${barisJurusan()}Kelas            : ${S.k.tingkat}
+Rombel           : ${S.k.rombel||'[isi]'}
+Bentuk           : ${S.k.bentuk}
+Jendela waktu    : ${S.k.jendela||'[isi]'}
+Anggota kelompok : ${S.k.anggota} siswa
+
+Judul proyek : ${S.p.judul||'[isi]'}
+Masalah nyata: ${S.p.masalah||'[isi]'}
+Produk akhir : ${S.p.produk||'[isi]'}
+Audiens      : ${S.p.audiens||'[isi]'}
+
+=== PETA KETERKAITAN ANTAR MATA PELAJARAN ===
+${daftar}
+
+=== SUSUNAN DOKUMEN YANG DIMINTA ===
+Tulis dengan nomor dan judul bagian persis seperti ini:
+
+1. HALAMAN JUDUL
+   Kop sekolah, judul dokumen, mata pelajaran yang terlibat, kelas,
+   bentuk kegiatan, tahun pelajaran.
+
+2. LEMBAR PENGESAHAN
+   Ruang tanda tangan kepala sekolah dan guru pengampu tiap mapel.
+
+3. LATAR BELAKANG
+   Tiga sampai empat paragraf. Mulai dari masalah nyata di atas,
+   bukan dari kalimat umum tentang perkembangan zaman.
+
+4. TUJUAN DAN MANFAAT PROYEK
+   Tujuan diturunkan dari tujuan pembelajaran tiap mapel di atas.
+   Manfaat dipisah: bagi peserta didik, bagi sekolah, bagi audiens.
+
+5. KONTRIBUSI TIAP MATA PELAJARAN
+   Satu subbagian per mapel. Sebutkan tujuan pembelajarannya,
+   perannya dalam proyek, dan keluaran nyata yang dihasilkan.
+   Untuk mapel pendukung, sertakan kalimat keterkaitannya.
+
+6. TAHAPAN PELAKSANAAN
+   Lima tahap, dengan nama persis: Menggali, Merancang, Mengerjakan,
+   Menguji dan memperbaiki, Menyerahkan. Untuk tiap tahap sebutkan
+   kegiatan siswa dan artefak yang dihasilkan.
+
+7. INSTRUKSI KERJA UNTUK SISWA
+   Ditulis dalam kalimat perintah yang langsung ditujukan kepada
+   siswa. Sertakan ketentuan kelompok dan pembagian peran.
+
+8. LINIMASA
+   Tabel: tahap, kegiatan, rentang waktu, mengacu pada jendela waktu
+   di atas.
+
+9. RENCANA PENILAIAN PER MATA PELAJARAN
+   Satu tabel per mapel, dengan kolom: tahap, jenis bukti, yang
+   dinilai, sifat (individu atau kelompok), bobot.
+
+10. RUBRIK PENILAIAN PER MATA PELAJARAN
+    Satu tabel per mapel: 4 kriteria sebagai baris, 4 tingkat sebagai
+    kolom, yaitu Baru Berkembang, Layak, Cakap, Mahir.
+
+11. AKUNTABILITAS INDIVIDU
+    Ketentuan kartu kendali mingguan siswa dan penilaian antarteman.
+
+12. LAMPIRAN
+    Format kartu kendali dan format lembar penilaian antarteman.
+
+=== BENTUK KELUARAN ===
+Dokumen ini akan dijadikan berkas Microsoft Word dan dicetak A4.
+
+- Bila Anda bisa membuat berkas .docx, buat langsung dan beri nama:
+  Jobsheet - ${S.p.judul||'[judul proyek]'} - Kelas ${S.k.tingkat}.docx
+- Bila tidak bisa, tulis dokumennya di layar mengikuti ketentuan
+  berikut supaya rapi ketika disalin ke Word:
+  1. Judul bagian ditulis dengan nomor dan huruf kapital, contoh
+     "3. LATAR BELAKANG". Subjudul ditulis "3.1 Rumusan Masalah".
+  2. Jangan memakai tanda pagar, tanda bintang, atau garis panjang
+     sebagai penanda judul dan pemisah.
+  3. Semua tabel dibuat sebagai tabel sungguhan, bukan daftar
+     bertanda minus dan bukan teks yang dirapikan dengan spasi.
+  4. Jangan memakai emoji atau ikon.
+  5. Jangan membungkus dokumen di dalam blok kode.
+  6. Tandai tempat pindah halaman dengan baris tersendiri berbunyi
+     [GANTI HALAMAN] — setidaknya sesudah halaman judul dan sesudah
+     lembar pengesahan.
+  7. Pada lembar pengesahan, sediakan baris tempat dan tanggal
+     dalam bentuk "${S.sekolah.kota||'[kota]'}, ................ 20...."
+     serta ruang kosong untuk tanda tangan dan nama terang.
+  8. Tulis nama dan jabatan penanda tangan di bawah ruang tanda
+     tangan, jangan dikosongkan.
+
+=== ATURAN PENILAIAN YANG WAJIB DIPATUHI ===
+- Tiap mata pelajaran punya bobot sendiri berjumlah tepat 100, yang
+  masuk ke rapor mapel itu sendiri. Jangan membuat satu nilai
+  gabungan.
+- Tahap 1 Menggali bersifat formatif: tetap menghasilkan artefak dan
+  diberi umpan balik tertulis, tetapi tidak diberi angka.
+- Sedikitnya separuh bobot tiap mapel harus jatuh pada tahap 1
+  sampai 3. Penilaian dilarang menumpuk di akhir.
+- Tahap 4 Menguji dan memperbaiki mendapat bobot terbesar.
+- Nilai kelompok maksimal 25 dari 100. Sisanya wajib individu.
+- Tiap titik penilaian harus menunjuk salah satu dari tiga jenis
+  bukti berikut, dan sebutkan jenisnya secara eksplisit:
+  (a) produk antara, yaitu artefak yang bisa dibaca ulang;
+  (b) kinerja teramati, yaitu yang hanya ada saat terjadi;
+  (c) jejak keputusan, yaitu perbandingan versi sebelum dan sesudah
+      revisi beserta alasan perubahannya.
+- Kinerja teramati hanya boleh dinilai oleh guru yang benar-benar
+  hadir saat kegiatan itu berlangsung. Guru yang tidak hadir menilai
+  produk antara dan jejak keputusan di jam pelajarannya sendiri.
+  Jangan memberi guru titik nilai pada kegiatan yang tidak ia hadiri.
+- Tiap titik penilaian harus bisa ditunjuk tujuan pembelajaran mana
+  yang diukurnya. Tanpa itu, angkanya tidak berdasar untuk masuk
+  rapor.
+
+=== ATURAN PENULISAN RUBRIK ===
+- Deskriptor menggambarkan mutu yang bisa dilihat mata.
+- Dilarang memakai kata: selalu, sering, kadang-kadang, jarang,
+  cukup baik, sangat baik.
+- Tiap kriteria berdiri sendiri sebagai baris. Jangan menjadikan
+  tiga kalimat berbeda sebagai tiga tingkat nilai dari satu
+  kriteria yang sama.
+- Sertakan satu kriteria bertema revisi berdasarkan masukan
+  pengguna, dengan pembeda pada tingkat Mahir berupa kemampuan
+  menolak sebagian masukan disertai alasan teknis yang benar.
+
+=== ATURAN UMUM ===
+- Bahasa Indonesia baku yang mudah dipahami guru dan siswa ${S.jenjang}.
+- Jangan mengarang nomor peraturan, kutipan, atau nama tokoh.
+- Tanpa kata pengantar dan tanpa penutup. Langsung ke bagian 1.
+- Bila jawaban Anda terpotong, berhenti di batas bagian yang rapi
+  dan tunggu perintah lanjutan. Saat melanjutkan, jangan mengulang
+  bagian yang sudah ditulis.`;
+}
+async function salin(id){
+  try{ await navigator.clipboard.writeText(document.getElementById(id).textContent);
+    pesan('Perintah disalin. Tempel di ChatGPT, Gemini, atau Claude.'); }
+  catch(e){ pesan('Penyalinan ditolak peramban. Blok teksnya lalu salin manual.'); }
+}
+function unduhTeks(){
+  const nm=('perintah-jobsheet-'+(S.p.judul||'proyek')).replace(/[^\w\-]+/g,'-').toLowerCase()+'.txt';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([document.getElementById('teks-job').textContent],{type:'text/plain;charset=utf-8'}));
+  a.download=nm; a.click(); URL.revokeObjectURL(a.href);
+  pesan('Berkas '+nm+' diunduh.');
+}
+
+/* ---------- pengaturan ---------- */
+function gantiJenjang(j){
+  if(j===S.jenjang) return;
+  const balik=()=>{ document.getElementById('f-jenjang').value=S.jenjang; };
+  tanya('Ganti jenjang ke '+JENJANG[j].label+'? Daftar tingkat, mata pelajaran, dan seluruh isian proyek akan disetel ulang. Pengaturan nama sekolah tetap.',()=>{
+    const sek=S.sekolah;
+    S=kosong(j); S.sekolah=sek;
+    render(); gambarJurusan(); gambarAturMapel(); gambarPeta(); gambarJob(); simpan();
+    pesan('Jenjang diubah ke '+JENJANG[j].label+'.');
+  },balik);
+}
+function gambarJurusan(){
+  const wj=document.getElementById('wadah-jur2'); if(wj) wj.hidden=!J().pakaiJurusan;
+  const l2=document.getElementById('lbl-jur2'); if(l2) l2.textContent=J().labelJurusan;
+  document.getElementById('daftar-jurusan').innerHTML = S.jurusan.length
+    ? S.jurusan.map((j,i)=>`<div class="baris"><span>${esc(j)}</span><button class="act warn sm" onclick="hapusJurusan(${i})">Hapus</button></div>`).join('')
+    : `<p class="hint" style="margin:0">Belum ada. Tambahkan di bawah.</p>`;
+}
+function tambahJurusan(){ const el=document.getElementById('f-jurbaru'), v=el.value.trim(); if(!v) return;
+  S.jurusan.push(v); el.value=''; gambarJurusan(); gambarIde(); simpan(); }
+function hapusJurusan(i){ S.jurusan.splice(i,1); gambarJurusan(); gambarIde(); simpan(); }
+function gambarAturMapel(){
+  const tk=document.getElementById('f-aturtingkat').value;
+  document.getElementById('daftar-mapel').innerHTML=S.mapel[tk].map((m,i)=>`
+    <div class="baris">
+      <label style="display:flex;align-items:center;gap:7px;margin:0;flex:1;font-weight:400;font-size:14px;color:var(--ink)">
+        <input type="checkbox" ${m[1]?'checked':''} onchange="setProd('${tk}',${i},this.checked)" style="width:16px;height:16px;accent-color:var(--steel)" aria-label="Tandai ${esc(m[0])} sebagai produktif">
+        ${esc(m[0])}${m[1]?' <span class="tag">produktif</span>':''}</label>
+      <button class="act warn sm" onclick="hapusMapel('${tk}',${i})">Hapus</button>
+    </div>`).join('');
+}
+function setProd(tk,i,on){ S.mapel[tk][i][1]=on?1:0; gambarAturMapel(); gambarIde(); simpan(); }
+function hapusMapel(tk,i){ S.mapel[tk].splice(i,1); gambarAturMapel(); gambarIde(); simpan(); }
+function tambahMapel(){
+  const tk=document.getElementById('f-aturtingkat').value;
+  const el=document.getElementById('f-mapelbaru'), v=el.value.trim(); if(!v) return;
+  S.mapel[tk].push([v,document.getElementById('f-mapelprod').checked?1:0]);
+  el.value=''; document.getElementById('f-mapelprod').checked=false;
+  gambarAturMapel(); gambarIde(); simpan();
+}
+function unduhAtur(){
+  const d={versi:VERSI,jenjang:S.jenjang,sekolah:S.sekolah,jurusan:S.jurusan,mapel:S.mapel};
+  const nm=('pengaturan-'+(S.sekolah.nama||'sekolah')).replace(/[^\w\-]+/g,'-').toLowerCase()+'.json';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:'application/json'}));
+  a.download=nm; a.click(); URL.revokeObjectURL(a.href);
+  pesan('Berkas '+nm+' diunduh.');
+}
+function muatAtur(input){
+  const f=input.files[0]; if(!f) return;
+  const r=new FileReader();
+  r.onload=()=>{
+    let d;
+    try{
+      d=JSON.parse(r.result);
+      if(!d.mapel||!d.jurusan||!Array.isArray(d.jurusan)||typeof d.mapel!=='object') throw new Error('format');
+    }catch(e){ pesan('Berkas tidak dikenali. Pastikan itu berkas pengaturan hasil unduhan aplikasi ini.'); return; }
+    tanya('Ganti pengaturan sekolah dengan isi berkas ini?',()=>{
+      try{
+        const jj=JENJANG[d.jenjang]?d.jenjang:S.jenjang;
+        S=normalisasi({jenjang:jj,sekolah:Object.assign({},S.sekolah,d.sekolah||{}),jurusan:d.jurusan,mapel:d.mapel,k:S.k,p:S.p,utama:S.utama,dukung:S.dukung});
+        render(); gambarJurusan(); gambarAturMapel(); simpan(); pesan('Pengaturan dimuat.');
+      }catch(e){ pesan('Berkas tidak dikenali. Pastikan itu berkas pengaturan hasil unduhan aplikasi ini.'); }
+    });
+  };
+  r.readAsText(f); input.value='';
+}
+function proyekBaru(){
+  tanya('Mulai proyek baru? Pengaturan sekolah dan daftar mapel tetap.',()=>{
+    const k=kosong(S.jenjang);
+    S={...k, sekolah:S.sekolah, jurusan:S.jurusan, mapel:S.mapel,
+       k:{...k.k, jurusan:S.k.jurusan, tingkat:S.k.tingkat}};
+    render(); gambarPeta(); gambarJob(); simpan(); pesan('Siap untuk proyek berikutnya.');
+  });
+}
+function hapusTotal(){
+  tanya('Kosongkan seluruh data termasuk pengaturan sekolah? Unduh dulu bila perlu.',()=>{
+    S=kosong(S.jenjang); render(); gambarJurusan(); gambarAturMapel(); gambarPeta(); gambarJob(); simpan();
+    pesan('Semua data dikosongkan.');
+  });
+}
+
+let tT;
+/* Konfirmasi di dalam halaman — confirm() bawaan browser sering diblokir di halaman tertanam */
+function tanya(teks,ya,batal){
+  const w=document.getElementById('tanya'), by=document.getElementById('tanya-ya'), bt=document.getElementById('tanya-tidak');
+  document.getElementById('tanya-teks').textContent=teks; w.hidden=false; by.focus();
+  const tutup=()=>{ w.hidden=true; by.onclick=bt.onclick=null; document.removeEventListener('keydown',esc2); };
+  const esc2=e=>{ if(e.key==='Escape'){ tutup(); if(batal) batal(); } };
+  document.addEventListener('keydown',esc2);
+  by.onclick=()=>{ tutup(); ya(); };
+  bt.onclick=()=>{ tutup(); if(batal) batal(); };
+}
+function pesan(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('on');
+  clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('on'),3200); }
+(async()=>{ const d=await Simpanan.baca(); if(d){ try{ S=normalisasi(d); }catch(e){ S=kosong('SMP'); } } render(); })();
+</script>
+</body>
+</html>
